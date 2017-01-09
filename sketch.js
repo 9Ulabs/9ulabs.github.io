@@ -6,7 +6,7 @@ var fillstep = 20;
 var origin = 225;
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(1200, 600);
 }
 
 function draw() {
@@ -19,7 +19,7 @@ function draw() {
   fill(123, 64, 238);
   strokeWeight(5);
   stroke(17, 117, 217);
-  quad(sin(frameCount/120)*350 + 100, 350, mouseX, 57, 187, mouseY, 89, 799, 799);
+  quad(sin(frameCount/120)*350 + 100, 350, mouseX, 57, 187, mouseY, 89, 999, 599);
  
   for (var i = 0; i < 12; i++) {
     fill(100+(mouseX%100), 255-(fillstep*i), 200);
@@ -37,15 +37,20 @@ function draw() {
   
   noStroke();
   for (var i = 0; i < 5; i++) {
-    fill(sin(frameCount/80)*255);
+    fill(sin(frameCount/400)*255);
     ellipse(
-      500+(sin(frameCount/(i+10))*(i+20)),
-      400+(i*50),
+      480+(sin(frameCount/(i+10))*(i+20)),
+      350+(i*50),
       40,
       40);
   }
   
-  var mobydick = "Here, millions of mixed shades and shadows, drowned dreams, somnambulisms, reveries; all that we call lives and souls, lie dreaming, dreaming, still; tossing like slumberers in their beds; the ever-rolling waves but made so by their restlessness.";
-  text(mobydick, 80, 510, 200, 200);
-  text("Herman Melville", 80, 670);
+  text("Here, millions of mixed shades and shadows,", 870, 230);
+  text("drowned dreams, somnambulisms, reveries;", 870, 245);
+  text("all that we call lives and souls,", 870, 260);
+  text("lie dreaming, dreaming, still;", 870, 275);
+  text("tossing like slumberers in their beds;", 870, 290);
+  text("the ever-rolling waves", 870, 305);
+  text("but made so by their restlessness.", 870, 320);
+  text("Herman Melville", 870, 380);
 }
