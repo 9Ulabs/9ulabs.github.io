@@ -1,57 +1,48 @@
-var ypos = 300;
-var xpos = 440;
-var xstep = 30;
-var hstep = 15;
-var fillstep = 20;
-var origin = 225;
+var frameInterval = 25; // how many frames per segment
+var numMolnarGridsX = 8;
+var numMolnarGridsY = 8;
+var gridSizeX = 4;
+var gridSizeY = 4;
+
+var molnarGrids = [];
+var indexActive = 0;
+
+var curvedVertices = false;
+var bg;
 
 function setup() {
-  createCanvas(1200, 600);
+  createCanvas(1200, 800);
+  noFill();
+  bg = loadImage("background.jpg");
+  
+  for (var y=1; y<numMolnarGridsY-1; y++) {
+    for (var x=1; x<numMolnarGridsX-1; x++) {
+      var mx = map(x, 0, numMolnarGridsX, 0, width);
+      var my = map(y, 0, numMolnarGridsY, 0, height);
+      var mwidth = width / numMolnarGridsX;
+      var mheight = height / numMolnarGridsY;
+      var margin = 10;
+      
+      var m = new MolnarGrid(mx, my, mwidth, mheight, gridSizeX, gridSizeY, margin);
+      m.createOrder();
+      molnarGrids.push(m);
+    }
+  }
 }
 
 function draw() {
-  background(sin(frameCount/300)*150+50);
-  fill(sin(frameCount/45 + 15)*150 + 100*random());
-  strokeWeight((frameCount%20)*random());
-  ellipse(50, 50, 160, 160);
-  stroke(cos(frameCount/187)*100);
-  rect(160, 130, 135, 245);
-  fill(123);
-  strokeWeight(random());
-  stroke(17);
-  quad(sin(frameCount/120)*500 + 100, 350, mouseX, 57, 300, mouseY, 89, 500, 599);
- 
-  for (var i = 0; i < 12; i++) {
-    fill(255-(fillstep*i)*random());
-    ellipse(xpos+(xstep*i), ypos, 20, 20+(hstep*i));
+  background(bg);
+  
+  molnarGrids[indexActive].update();
+  
+  // check if it's done... if it is, set to update the next molnar grid
+  if (molnarGrids[indexActive].isDone()) {
+    indexActive = indexActive + 1;
+    indexActive = min(indexActive, molnarGrids.length-1);
   }
   
-  strokeWeight(2);
-  for (var i = 0; i < 10; i++) {
-    stroke(210);
-    line(i*25 + 50, origin, origin, origin - i*25);
-    line(origin + i*25, origin, origin, i*25);
-    line(450 - i*25, origin, origin, origin + i*25);
-    line(origin - i*25, origin, origin, 450 - i*25);
+  for (var i=0; i<molnarGrids.length; i++) {
+    molnarGrids[i].draw();
   }
-  
-  noStroke();
-  for (var i = 0; i < 5; i++) {
-    fill(sin(frameCount/400)*255);
-    ellipse(
-      480+(sin(frameCount/(i+10))*(i+20)),
-      350+(i*50),
-      40,
-      40);
-  }
-  
-  fill(cos(frameCount/300)*150+50);
-  textSize(16);
-  textFont("Helvetica");
-  textStyle(ITALIC);
-  text("Technology is not bringing things", 860, 260);
-  text("near but it is expanding the here", 860, 280);
-  text("into an infinite space.", 860, 300);
-  textStyle(NORMAL);
-  text("Tom McCarthy", 860, 355);
 }
+
