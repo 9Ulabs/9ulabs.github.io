@@ -1,26 +1,30 @@
-var frameInterval = 25; // how many frames per segment
-var numMolnarGridsX = 8;
-var numMolnarGridsY = 8;
-var gridSizeX = 4;
-var gridSizeY = 4;
+var frameInterval = 10; // how many frames per segment
+var numMolnarGridsX = 25;
+var numMolnarGridsY = 3;
+var gridSizeX = 2;
+var gridSizeY = 3;
 
 var molnarGrids = [];
 var indexActive = 0;
 
 var curvedVertices = false;
-var bg;
+var textHeight = 150;
+
+var a, b;
 
 function setup() {
-  createCanvas(1200, 800);
+  createCanvas(700, 900);
   noFill();
-  bg = loadImage("background.jpg");
-  
-  for (var y=1; y<numMolnarGridsY-1; y++) {
-    for (var x=1; x<numMolnarGridsX-1; x++) {
+  frameRate(100);
+  a = round(random()*6)*100 + 50;
+  b = round(random()*6)*100 + 50;
+
+  for (var y=0; y<numMolnarGridsY; y++) {
+    for (var x=0; x<numMolnarGridsX; x++) {
       var mx = map(x, 0, numMolnarGridsX, 0, width);
-      var my = map(y, 0, numMolnarGridsY, 0, height);
+      var my = map(y, 0, numMolnarGridsY, height - textHeight, height);
       var mwidth = width / numMolnarGridsX;
-      var mheight = height / numMolnarGridsY;
+      var mheight = textHeight / numMolnarGridsY;
       var margin = 10;
       
       var m = new MolnarGrid(mx, my, mwidth, mheight, gridSizeX, gridSizeY, margin);
@@ -31,13 +35,23 @@ function setup() {
 }
 
 function draw() {
-  background(bg);
-  
+  var c = round(random()*6)*100 + 50;
+  var d = round(random()*6)*100 + 50;
+  stroke(255);
+  if (frameCount % 15 == 0) {
+    line(a,b,c,d);
+    a = c;
+    b = d;
+  }
+
   molnarGrids[indexActive].update();
   
   // check if it's done... if it is, set to update the next molnar grid
   if (molnarGrids[indexActive].isDone()) {
-    indexActive = indexActive + 1;
+    if (indexActive % 4 == 0 && round(random()))
+      indexActive = indexActive + 2;
+    else
+      indexActive = indexActive + 1
     indexActive = min(indexActive, molnarGrids.length-1);
   }
   
